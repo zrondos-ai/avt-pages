@@ -3,7 +3,8 @@
 Static seed-view HTML exported from the local agentic-video-testing app.
 
 - Site: https://zrondos-ai.github.io/avt-pages/
-- Grok upsampler eval: https://zrondos-ai.github.io/avt-pages/evals/grok-upsampler/20260924T230037Z/
+- Grok upsampler eval (transform v2 P0 → P1): https://zrondos-ai.github.io/avt-pages/evals/grok-upsampler/20260926T212804Z/
+- Grok upsampler eval (P0 vs P1): https://zrondos-ai.github.io/avt-pages/evals/grok-upsampler/20260924T230037Z/
 - Images load from the original CDN (not bundled in these files)
 - This site is **public**
 
