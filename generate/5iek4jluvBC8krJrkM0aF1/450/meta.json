@@ -1,0 +1,8 @@
+{
+  "project_id": "5iek4jluvBC8krJrkM0aF1",
+  "pipeline_run_id": 450,
+  "label": "Generate (7 clips)",
+  "trace_id": "74a25e2b8161524805b3a9e0fbf1a7e5",
+  "published_at": "2026-10-06T17:10:22.948166+00:00",
+  "source": "http://127.0.0.1:8765/projects/5iek4jluvBC8krJrkM0aF1/generate/450"
+}
