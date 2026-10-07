@@ -1,0 +1,1244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>tonystark96: Tomatina &amp; Blake</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101114;
+      --card: #1a1c21;
+      --muted: #9aa3b2;
+      --line: #2a2e37;
+      --accent: #d7b36a;
+      --gap: #f0a37a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      width: 80%;
+      max-width: none;
+      padding: 32px 20px 80px;
+      font: 15px/1.45 ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: #f4f1ea;
+    }
+    h1, h2, h3, h4, h5 { margin: 0 0 .4em; }
+    .kicker { color: var(--accent); text-transform: uppercase; letter-spacing: .08em; font-size: 12px; }
+    .header, .clip, .inventory { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin: 0 0 24px; }
+    .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    dt { color: var(--muted); font-size: 12px; }
+    dd { margin: 0; }
+    code { font-size: 12px; }
+    .topic, .desc, .prompt { color: #ddd8ce; }
+    .clip-head {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .clip-head h2 { margin: 0; }
+    .clip-head .meta-line { margin: 0 0 8px; }
+    .cast { margin: 16px 0; }
+    .cast > summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 16px;
+      font-weight: 600;
+      list-style-position: outside;
+      margin-bottom: 10px;
+    }
+    .cast .cast-subjects,
+    .cast .props {
+      margin-top: 12px;
+    }
+    .clip-media, .subjects, .shots { display: grid; gap: 12px; }
+    .clip-media {
+      grid-template-columns: 1fr 1fr;
+      flex: 0 0 auto;
+      width: auto;
+    }
+    .clip-media figure {
+      margin: 0;
+      width: 280px;
+    }
+    .clip-media .scene {
+      width: 280px;
+      height: 498px;
+      aspect-ratio: 9 / 16;
+      object-fit: contain;
+    }
+    .cast-subjects { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .cast-subject { flex-direction: column; }
+    .subject-photos {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .subject-photo {
+      margin: 0;
+      width: 72px;
+      flex: 0 0 72px;
+    }
+    .shot-subjects {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      grid-template-columns: none;
+    }
+    .shot-subject {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: auto;
+      flex: 0 0 auto;
+      gap: 4px;
+      padding: 8px;
+    }
+    .shot-subject .name {
+      margin: 0;
+      font-size: 13px;
+      max-width: 110px;
+      line-height: 1.2;
+    }
+    .shot-subject .meta-line {
+      margin: 0;
+      font-size: 11px;
+      max-width: 110px;
+      line-height: 1.2;
+    }
+    .shot-subject .avatar {
+      width: 110px;
+      height: 196px;
+    }
+    .shots { grid-template-columns: 1fr; margin-top: 16px; }
+    .shot, .subject, .prop, .inventory-card { background: #12141a; border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .subject, .prop, .wardrobe, .bot-card, .npc-card, .prop-card { display: flex; gap: 10px; }
+    .scene, .thumb, .avatar, .wardrobe-thumb, .inventory-img { width: 100%; aspect-ratio: 9 / 16; object-fit: contain; border-radius: 10px; background: #0b0c10; }
+    .avatar, .wardrobe-thumb, .thumb { width: 72px; height: 128px; aspect-ratio: 9 / 16; flex: 0 0 72px; }
+    .inventory-img.wide { aspect-ratio: 9 / 16; }
+    .inventory-section { margin: 20px 0 8px; }
+    .inventory-section h2 { font-size: 18px; }
+    .inventory-grid { display: grid; gap: 12px; }
+    .bots-grid, .npcs-grid, .props-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+    .media-grid { grid-template-columns: repeat(auto-fit, minmax(280px, max-content)); }
+    .media-grid .inventory-img.wide {
+      width: 280px;
+      height: 498px;
+      aspect-ratio: 9 / 16;
+      object-fit: contain;
+    }
+    .media-card {
+      margin: 0;
+      width: 280px;
+    }
+    .inventory-photos {
+      display: flex;
+      gap: 8px;
+      flex: 0 0 auto;
+      align-items: flex-start;
+    }
+    .inventory-photos figure {
+      margin: 0;
+      width: 140px;
+      flex: 0 0 140px;
+    }
+    .bots-grid .inventory-img,
+    .npcs-grid .inventory-img,
+    .props-grid .inventory-img {
+      width: 140px;
+      height: 249px;
+      aspect-ratio: 9 / 16;
+      object-fit: contain;
+    }
+    .empty { display: grid; place-items: center; color: var(--muted); font-size: 12px; }
+    .pill { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: #2c3340; color: #d7dde8; font-size: 11px; }
+    .gap { color: var(--gap); font-size: 12px; }
+    .audio { margin: 6px 0; }
+    .shot-copy {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .shot-row {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+      align-items: start;
+    }
+    .subjects-panel, .action-panel, .dialogue-panel {
+      background: #0d0f14;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      min-width: 0;
+    }
+    .subjects-panel h5, .action-panel h5, .dialogue-panel h5 {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 13px;
+      margin: 0 0 10px;
+    }
+    .action-panel .prompt,
+    .dialogue-panel .line {
+      font-size: 17px;
+      line-height: 1.5;
+      color: #f7f3ea;
+    }
+    .mention {
+      color: #7ec8ff;
+      font-weight: 700;
+    }
+    .mention-character {
+      color: #b8a4ff;
+    }
+    .dialogue-line { margin: 0 0 12px; }
+    .dialogue-line:last-child { margin-bottom: 0; }
+    .speaker {
+      margin: 0 0 4px;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .line-wrap { margin-top: 2px; }
+    .line { color: #f4f1ea; font-style: italic; }
+    .sfx {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: #e6dfd0;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+    .sfx strong {
+      display: inline-block;
+      margin-right: 6px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-size: 13px;
+    }
+    .props { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+    .time, .meta-line, figcaption { color: var(--muted); font-size: 13px; }
+    .name { margin: 0 0 .35em; font-weight: 600; }
+    @media (max-width: 800px) {
+      .clip-media { grid-template-columns: 1fr 1fr; }
+      .bot-card, .npc-card, .prop-card { flex-direction: column; }
+      .shot-copy { grid-template-columns: 1fr; }
+      .shot-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+    
+    <header class="header">
+      <div>
+        <p class="kicker">Video Project Version</p>
+        <h1>tonystark96: Tomatina &amp; Blake</h1>
+      </div>
+      <dl class="meta">
+        <div><dt>VPV</dt><dd><code>4LXqJsO3a01bN1dGegTD4J</code></dd></div>
+        <div><dt>Project</dt><dd><code>7weXZwomKOayoJz54Xr0Mk</code></dd></div>
+        <div><dt>Owner</dt><dd>tonystark96 <code>677f1883f8e1a6e3703a7394</code></dd></div>
+        <div><dt>Duration</dt><dd>DURATION_30S</dd></div>
+        <div><dt>Pacing</dt><dd>PACING_STANDARD</dd></div>
+      </dl>
+      <details><summary>Topic</summary><p class="topic">In their dimly lit hideout, Tomatina, Blake, and Elle Gorithm gather around a wooden table to review the museum blueprints. Standing at the high-security jewel museum vault, Tomatina uses her tools to crack open the heavy vault door. Inside the vault room, Elle Gorithm reaches out and carefully lifts the glowing diamond out of its glass display case. Suddenly, a security guard enters from the far doorway, raising his flashlight and shouting to freeze. Tomatina quickly hurls a fresh red tomato at the security guard&#x27;s face to create a messy distraction. While Tomatina slips away into the shadows, the security guard wipes his eyes and snaps steel handcuffs onto the wrists of Blake and Elle Gorithm.</p></details>
+      
+    </header>
+    
+    
+    <section class="inventory">
+      <p class="kicker">Project inventory</p>
+      <section class="inventory-section"><h2>Bots</h2><div class="inventory-grid bots-grid">
+                <article class="inventory-card bot-card">
+                  <div class="inventory-photos">
+                    <figure>
+                      <img class="inventory-img" src="https://signal-prod-01.s3.amazonaws.com/ai-generated/bot-styles/6a1a07a01d9204230afde1f6/1780091844986/792.jpg" alt="Tomatina" />
+                      <figcaption>Profile</figcaption>
+                    </figure>
+                    <figure>
+                      <img class="inventory-img" src="https://s3.amazonaws.com/signal-prod-01/bots/6a1a07a01d9204230afde1f6/01a06ea6-7724-7747-9e34-b1beba2090f5.jpg" alt="Tomatina" />
+                      <figcaption>In wardrobe</figcaption>
+                    </figure>
+                  </div>
+                  <div>
+                    <p class="name">Tomatina</p>
+                    <p class="meta-line">@tomatina-baddie</p>
+                    <p class="desc">Sleek, tight black leather cat suit with gold zippers.</p>
+                    
+                  </div>
+                </article>
+                
+                <article class="inventory-card bot-card">
+                  <div class="inventory-photos">
+                    <figure>
+                      <img class="inventory-img" src="https://external.cdn.signal.is/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1IjoiaHR0cHM6Ly9zMy5hbWF6b25hd3MuY29tL3NpZ25hbC1wcm9kLTAxL3Byb2QvYXZhdGFyLzY3Y2I5ZjZmOTNlZjk1NTRjYmVmZTc2Nl8xNzQ5NzcxMjcwMzQ0NDk2LnBuZyIsInYiOnRydWV9.l8ZO96c-a5cPIHfurjahd-lD4VEON4AL4OExFdov89w" alt="Blake" />
+                      <figcaption>Profile</figcaption>
+                    </figure>
+                    <figure>
+                      <img class="inventory-img" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+                      <figcaption>In wardrobe</figcaption>
+                    </figure>
+                  </div>
+                  <div>
+                    <p class="name">Blake</p>
+                    <p class="meta-line">@demontwink</p>
+                    <p class="desc">Glimmering silver sequin crop top and tight black athletic joggers.</p>
+                    
+                  </div>
+                </article>
+                
+                <article class="inventory-card bot-card">
+                  <div class="inventory-photos">
+                    <figure>
+                      <img class="inventory-img" src="https://signal-prod-01.s3.amazonaws.com/ai-generated/bot-styles/697909f0ca653f952bc50df8/1769540215187/365.jpg" alt="Elle Gorithm" />
+                      <figcaption>Profile</figcaption>
+                    </figure>
+                    <figure>
+                      <img class="inventory-img" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+                      <figcaption>In wardrobe</figcaption>
+                    </figure>
+                  </div>
+                  <div>
+                    <p class="name">Elle Gorithm</p>
+                    <p class="meta-line">@elle-gorithm</p>
+                    <p class="desc">Futuristic neon-blue lined vinyl trench coat and cybernetic visor.</p>
+                    
+                  </div>
+                </article>
+                </div></section>
+      <section class="inventory-section"><h2>NPCs</h2><div class="inventory-grid npcs-grid">
+                <article class="inventory-card npc-card">
+                  <div class="inventory-photos">
+                    <figure>
+                      <img class="inventory-img" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-762c-7772-a0ce-677fc9205804" alt="Security Guard" />
+                      <figcaption>In wardrobe</figcaption>
+                    </figure>
+                  </div>
+                  <div>
+                    <p class="name">Security Guard</p>
+                    <p class="desc">An authoritarian, serious, and easily startled museum guard. He speaks in gruff, commanding commands.</p>
+                    
+                  </div>
+                </article>
+                </div></section>
+      <section class="inventory-section"><h2>Backgrounds</h2><div class="inventory-grid media-grid">
+            <article class="inventory-card media-card">
+              <img class="inventory-img wide" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-be08-72c3-8eb1-191581ab1fe4.jpg" alt="Clip 1 background" />
+              <p class="name">Clip 1</p>
+              
+            </article>
+            
+            <article class="inventory-card media-card">
+              <img class="inventory-img wide" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-bcbb-7b35-91c3-d8f8cc26325e.jpg" alt="Clip 2 background" />
+              <p class="name">Clip 2</p>
+              
+            </article>
+            
+            <article class="inventory-card media-card">
+              <img class="inventory-img wide" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-b4f0-7a75-b418-5516da47cbed.jpg" alt="Clip 3 background" />
+              <p class="name">Clip 3</p>
+              
+            </article>
+            
+            <article class="inventory-card media-card">
+              <img class="inventory-img wide" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-bb73-7473-8ec1-782ffbd5abd8.jpg" alt="Clip 4 background" />
+              <p class="name">Clip 4</p>
+              
+            </article>
+            </div></section>
+      <section class="inventory-section"><h2>Props</h2><div class="inventory-grid props-grid">
+                <article class="inventory-card prop-card">
+                  <div class="inventory-photos">
+                    <figure>
+                      <img class="inventory-img" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea7-424c-7cb6-80c1-8974a6107711" alt="heist blueprints" />
+                    </figure>
+                  </div>
+                  <div>
+                    <p class="name">heist blueprints</p>
+                    <p class="desc">Large, detailed architectural blueprints of the museum. The paper is thick, slightly weathered at the edges, and features glowing cyan gridlines showing floor layouts. Technical annotations and schematic text read &#x27;MUSEUM VAULT SYSTEM v4&#x27; in a precise digital font. Smudges and faint grease marks are scattered across its dark blue surface.</p>
+                    
+                  </div>
+                </article>
+                
+                <article class="inventory-card prop-card">
+                  <div class="inventory-photos">
+                    <figure>
+                      <img class="inventory-img" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea7-3ed0-76e2-9d3d-ad2a0f3cce07" alt="the heart diamond" />
+                    </figure>
+                  </div>
+                  <div>
+                    <p class="name">the heart diamond</p>
+                    <p class="desc">A massive, multi-faceted heart-shaped diamond. It emits a soft, pulsing internal blue-white light that reflects off its sharp, flawless geometric cuts. The gemstone is pristine, with no scratches or inclusions, and sits on a small black velvet cushion. Its geometric facets refract light in brilliant crystalline patterns.</p>
+                    
+                  </div>
+                </article>
+                
+                <article class="inventory-card prop-card">
+                  <div class="inventory-photos">
+                    <figure>
+                      <img class="inventory-img" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea7-3bb0-7c24-a2b1-d493c3cd4601" alt="steel handcuffs" />
+                    </figure>
+                  </div>
+                  <div>
+                    <p class="name">steel handcuffs</p>
+                    <p class="desc">A pair of heavy-duty, double-locking steel handcuffs with a brushed metallic finish. The chain links connecting the two cuffs are thick and slightly worn with minor scuffs and scratches. Reflective highlights glint off the metallic circular teeth. The metal surfaces show realistic grime from frequent use.</p>
+                    
+                  </div>
+                </article>
+                </div></section>
+      <section class="inventory-section"><h2>Locations</h2><div class="inventory-grid media-grid">
+            <article class="inventory-card media-card">
+              <img class="inventory-img wide" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-774a-706c-ab09-09b4d0366aab" alt="Thieves&#x27; Hideout" />
+              <p class="name">Thieves&#x27; Hideout</p>
+              
+            </article>
+            
+            <article class="inventory-card media-card">
+              <img class="inventory-img wide" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-775f-7532-8371-c7d01f370b49" alt="Museum Secret Vault" />
+              <p class="name">Museum Secret Vault</p>
+              
+            </article>
+            </div></section>
+    </section>
+    
+  
+    <article class="clip">
+      <header class="clip-head">
+        <h2>Clip 1</h2>
+        <p class="meta-line">
+          Thieves&#x27; Hideout
+          · 5s
+          · cinematic-modern
+          · <code>wU0BwrTcAwd2Lz5e1K9Hn</code>
+        </p>
+        <div class="clip-media">
+          <figure>
+            <img class="scene" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-be08-72c3-8eb1-191581ab1fe4.jpg" alt="background" />
+            <figcaption>Background </figcaption>
+          </figure>
+          <figure>
+            <img class="scene" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-774a-706c-ab09-09b4d0366aab" alt="Thieves&#x27; Hideout" />
+            <figcaption>Thieves&#x27; Hideout </figcaption>
+          </figure>
+        </div>
+      </header>
+      <details><summary>Background description</summary><p class="desc">@Image1 provides the Environment Geometry to use as a reference. @Image2 depicts &quot;a red humanoid tomato&quot;. @Image3 depicts &quot;an athletic blonde short man&quot;. @Image4 depicts &quot;a silver-haired futuristic woman&quot;.
+
+# Scene Overview
+In the dimly lit concrete warehouse room, three characters are gathered closely around the round wooden table from the midground of @Image1. Under a single hanging incandescent bulb, the characters huddle together in the midground, with large architectural blueprints spread across the tabletop.
+
+# Frame Composition
+Front Medium Shot. The shot captures the three characters from the waist up as they stand around the round wooden table in the midground. @Image2 is positioned in the center, leaning over the table. @Image4 stands to the frame-left side of @Image2, while @Image3 stands to the frame-right side of @Image2. The dark wooden tabletop and the spread-out blueprints are visible in the foreground, with the background showing the brick wall and the rusted metal door from the background of @Image1.
+
+# @Image2 Edit Instructions
+- Pose: Standing in the center midground, leaning forward with her red tomato hands resting flat on the edge of the round wooden table.
+- Frame Position: Center-frame in the midground, behind the front edge of the round wooden table.
+- Body Orientation: Torso angled slightly downward toward the table, head facing forward.
+- Gaze: Looking down intently at the blueprints on the table.
+- Preserve the identity and wardrobe as seen in @Image2.
+
+# @Image3 Edit Instructions
+- Pose: Standing upright beside the table on the frame-right side.
+- Frame Position: Frame-right in the midground, standing next to @Image2.
+- Body Orientation: Torso turned three-quarters toward the table on the left.
+- Gaze: Staring downward at the blueprints on the table.
+- Preserve the identity and wardrobe as seen in @Image3.
+
+# @Image4 Edit Instructions
+- Pose: Standing beside the table on the frame-left side.
+- Frame Position: Frame-left in the midground, standing next to @Image2.
+- Body Orientation: Torso angled three-quarters toward the table on the right.
+- Gaze: Looking down at the blueprints, with her digital visor casting a faint blue glow onto her face.
+- Preserve the identity and wardrobe as seen in @Image4.
+
+# Environment Description
+## Included (In Frame)
+- The large blueprints of a museum layout, printed on thick weathered paper with glowing cyan gridlines, spread flat across the surface of the round wooden table.
+- The round wooden table from the midground of @Image1.
+- The low-hanging, warm incandescent bulb hanging directly over the table.
+- The brick wall and rusted metal door from the background of @Image1.
+
+## Excluded (Not In Frame)
+- The foreground open concrete floor from @Image1.
+
+# Lighting
+Dramatic overhead lighting cast entirely by the warm incandescent bulb hanging above the table, creating strong contrasts and deep shadows on the characters&#x27; faces and bodies. A faint, cool neon-blue light emanates from @Image4&#x27;s visor, casting a soft blue glow on her face and the frame-left portion of the table.
+
+# Capture Style
+An IMAX photorealistic film still. Shot on ARRI Alexa 65 with IMAX 70mm film quality. Subject rendered with extreme crystal clarity, every detail hyper-defined and sharp. Photorealistic, high-fidelity texture. Ultra-sharp focus on subject, high micro-detail rendering. Skin pores visible, accurate skin texture, realistic fabric simulation. Massive dynamic range capture, deep shadows and bright highlights. Cinematic color science. Clean precise commercial color grade.</p></details><details><summary>Location description</summary><p class="desc">CAMERA ZONE: southeast corner looking northwest. FRAME: Eye-Level Three-Quarter Angle Wide Shot; camera offset from the table&#x27;s long axis; near short end and one long side both visible; long edges receding diagonally toward the far end. VISIBLE GEOMETRY: The round wooden table sits in the midground, with a rusted metal door visible on the far north wall. DEPTH ORDER: Foreground open concrete floor; Midground round wooden table; Background brick wall and metal door. VISIBLE ROUTES: Walkable concrete floor running from the door to the round table. LIGHTING AND TIME: Night. A low-hanging, warm incandescent bulb hangs directly over the table, casting dramatic shadows. Exterior window light is nonexistent. FIXED GEOMETRY: One large, heavy, round wooden table sits centered in the room. A single brick wall stands on the south side, while a rusted metal door end wall stands on the north side. TRAVERSABLE ROUTES: A clean walkable concrete floor route connects the rusted metal entrance door to the round table in the center. CAMERA ZONES: One primary camera zone is anchored diagonally at the southeast corner of the room, looking northwest toward the table. LIGHTING AND TIME: Night. A low-hanging, warm incandescent bulb hangs directly over the table, casting dramatic shadows. Exterior window light is nonexistent.</p></details>
+      <details class="cast">
+        <summary>Cast, Wardrobe, and Props</summary>
+        <div class="subjects cast-subjects">
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/6a1a07a01d9204230afde1f6/01a06ea6-7724-7747-9e34-b1beba2090f5.jpg" alt="Tomatina" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-9531-74db-b933-683bda93f170" alt="Tomatina wardrobe" />
+              <figcaption>Tomatina wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Tomatina <span class="pill">user</span></p>
+        <p class="desc">Sleek, tight black leather cat suit with gold zippers.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-a0d2-7c10-b013-5e8bbe7d9ee5" alt="Blake wardrobe" />
+              <figcaption>Blake wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Blake <span class="pill">user</span></p>
+        <p class="desc">Glimmering silver sequin crop top and tight black athletic joggers.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-a0a2-7e63-a090-d3aa4598d8a5" alt="Elle Gorithm wardrobe" />
+              <figcaption>Elle Gorithm wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Elle Gorithm <span class="pill">user</span></p>
+        <p class="desc">Futuristic neon-blue lined vinyl trench coat and cybernetic visor.</p>
+        
+      </div>
+    </article>
+    </div>
+        <ul class="props">
+    <li class="prop">
+      <img class="thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea7-424c-7cb6-80c1-8974a6107711" alt="heist blueprints" />
+      <div>
+        <strong>heist blueprints</strong>
+        <p>Large, detailed architectural blueprints of the museum. The paper is thick, slightly weathered at the edges, and features glowing cyan gridlines showing floor layouts. Technical annotations and schematic text read &#x27;MUSEUM VAULT SYSTEM v4&#x27; in a precise digital font. Smudges and faint grease marks are scattered across its dark blue surface.</p>
+        
+      </div>
+    </li>
+    </ul>
+      </details>
+      <div class="shots">
+    <article class="shot">
+      <header>
+        <h4>Shot 1</h4>
+        <p class="time">0s – 5s</p>
+      </header>
+      <div class="shot-row">
+        <section class="subjects-panel">
+          <h5>Subjects</h5>
+          <div class="subjects shot-subjects">
+    <article class="subject shot-subject">
+      <p class="name">Tomatina</p>
+      <p class="meta-line">@tomatina-baddie</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/6a1a07a01d9204230afde1f6/01a06ea6-7724-7747-9e34-b1beba2090f5.jpg" alt="Tomatina" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Blake</p>
+      <p class="meta-line">@demontwink</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Elle Gorithm</p>
+      <p class="meta-line">@elle-gorithm</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+      
+    </article>
+    </div>
+        </section>
+        <section class="action-panel">
+          <h5>Action</h5>
+          <p class="prompt">Hard Cut to Tomatina leaning over the wooden table where the heist blueprint is spread. <span class="mention mention-user">[user:tomatina-baddie]</span> taps the center of heist blueprints spread across the wooden table as she begins speaking to the group. The camera slowly dollies forward toward the table, focusing on the team&#x27;s tense expressions as the paper blueprint remains centered on the wood.</p>
+        </section>
+        <section class="dialogue-panel">
+          <h5>Dialogue</h5>
+          <div class="dialogue-line"><p class="speaker">tomatina-baddie | Tomatina</p><div class="line-wrap"><q class="line">Vault blueprints don&#x27;t lie, so squeeze this bank dry.</q></div></div>
+          <div class="sfx"><strong>SFX</strong> Dull room hum, soft paper rustling, low dramatic synth tone</div>
+        </section>
+      </div>
+    </article>
+    </div>
+    </article>
+    
+    <article class="clip">
+      <header class="clip-head">
+        <h2>Clip 2</h2>
+        <p class="meta-line">
+          Museum Secret Vault
+          · 10s
+          · cinematic-modern
+          · <code>2VP62Q0xWn2GsGgsLGrj5K</code>
+        </p>
+        <div class="clip-media">
+          <figure>
+            <img class="scene" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-bcbb-7b35-91c3-d8f8cc26325e.jpg" alt="background" />
+            <figcaption>Background </figcaption>
+          </figure>
+          <figure>
+            <img class="scene" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-775f-7532-8371-c7d01f370b49" alt="Museum Secret Vault" />
+            <figcaption>Museum Secret Vault </figcaption>
+          </figure>
+        </div>
+      </header>
+      <details><summary>Background description</summary><p class="desc">@Image1 provides the Environment Geometry to use as a reference. @Image2 depicts &quot;a red-and-green humanoid tomato woman&quot;. @Image3 depicts &quot;an athletic blonde short man&quot;. @Image4 depicts &quot;a silver-haired futuristic woman&quot;. 
+
+# Scene Overview: In the concrete vault room, @Image2 is positioned in the far background interacting with the heavy steel circular vault door from @Image1, while @Image3 and @Image4 stand in the midground observing her actions. 
+
+# Frame Composition
+Left Wide Shot. The frame shows a wide view of the vault room from the left, capturing all three characters in their respective depth layers. @Image2 is in the background, positioned screen-left next to the circular vault door from @Image1. @Image3 is centered in the midground layer. @Image4 is positioned screen-right in the midground. The polished floor and midground layout from @Image1 remain visible, creating a clear depth path between the characters.
+
+# @Image2 Edit Instructions
+- Pose: Standing facing the vault door with her body turned away from the camera, her hands resting directly on the metallic dials of the massive circular steel vault door from @Image1.
+- Frame Position: Screen-left, Background.
+- Body Orientation: Torso facing away from the camera, turned toward the vault door.
+- Gaze: Looking forward at the vault dials.
+- Props and Held Items: None.
+- Preserve the identity and wardrobe as seen in @Image2, including the sleek, tight black leather cat suit with gold zippers.
+
+# @Image3 Edit Instructions
+- Pose: Standing upright in a dramatic, startled pose, with a wide-eyed, dramatic gasping expression on his face.
+- Frame Position: Centered, Midground.
+- Body Orientation: Torso facing frame-left, head turned towards the left side of the frame.
+- Gaze: Looking screen-left towards @Image2 in dramatic shock.
+- Props and Held Items: None.
+- Preserve the identity and wardrobe as seen in @Image3, including the glimmering silver sequin crop top and tight black athletic joggers.
+
+# @Image4 Edit Instructions
+- Pose: Standing silent, analytical, and perfectly still with a neutral, calculating expression.
+- Frame Position: Screen-right, Midground.
+- Body Orientation: Torso facing frame-left, angled toward the vault door.
+- Gaze: Looking screen-left toward @Image2.
+- Props and Held Items: Wearing a cybernetic visor as seen in @Image4.
+- Preserve the identity and wardrobe as seen in @Image4, including the futuristic neon-blue lined vinyl trench coat and silver hair.
+
+# Environment Description
+## Included (In Frame)
+- The polished marble floor from the foreground of @Image1
+- The black display pedestal with glass case in the midground of @Image1
+- The massive circular steel vault door on the background wall from @Image1
+- Cool white fluorescent overhead panels
+- The faint blue laser alarm grid casting intersecting lines
+
+# Lighting
+Cool overhead fluorescent panels illuminate the concrete space, casting clean, high-contrast light and deep shadows on the characters and environment, with faint blue laser light intersecting the room.
+
+# Capture Style
+An IMAX photorealistic film still. Shot on ARRI Alexa 65 with IMAX 70mm film quality. Subject rendered with extreme crystal clarity, every detail hyper-defined and sharp. Photorealistic, high-fidelity texture. Ultra-sharp focus on subject, high micro-detail rendering. Freckles/skin pores visible, accurate skin texture, realistic fabric simulation. Massive dynamic range capture, deep shadows and bright highlights. Cinematic color science. Clean precise commercial color grade.</p></details><details><summary>Location description</summary><p class="desc">CAMERA ZONE: southeast corner looking northwest. FRAME: Eye-Level Three-Quarter Angle Wide Shot; camera offset from the pedestal&#x27;s long axis; near short end and one long side both visible; long edges receding diagonally toward the far end. VISIBLE GEOMETRY: The central pedestal with its glass display case stands in the midground, with the heavy steel circular vault door visible on the background west wall. DEPTH ORDER: Foreground polished marble floor; Midground black display pedestal with glass case; Background steel vault door. VISIBLE ROUTES: Marble walkway from the vault door to the display pedestal and the far emergency exit route. LIGHTING AND TIME: Night. Cool white fluorescent overhead panels illuminate the space, with a soft blue laser alarm grid casting faint intersecting lines across the room. FIXED GEOMETRY: A heavy, reinforced steel circular vault door stands on the west wall. A sleek black stone pedestal with a glass case sits centered in the room. An emergency exit doorway stands on the east wall. TRAVERSABLE ROUTES: A marble-tiled walkway connects the vault door on the west, the central display pedestal, and the emergency doorway on the east. CAMERA ZONES: One primary camera zone is anchored diagonally at the southeast corner, looking northwest toward the pedestal and vault door. LIGHTING AND TIME: Night. Cool white fluorescent overhead panels illuminate the space, with a soft blue laser alarm grid casting faint intersecting lines across the room.</p></details>
+      <details class="cast">
+        <summary>Cast, Wardrobe, and Props</summary>
+        <div class="subjects cast-subjects">
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/6a1a07a01d9204230afde1f6/01a06ea6-7724-7747-9e34-b1beba2090f5.jpg" alt="Tomatina" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-9531-74db-b933-683bda93f170" alt="Tomatina wardrobe" />
+              <figcaption>Tomatina wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Tomatina <span class="pill">user</span></p>
+        <p class="desc">Sleek, tight black leather cat suit with gold zippers.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-a0d2-7c10-b013-5e8bbe7d9ee5" alt="Blake wardrobe" />
+              <figcaption>Blake wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Blake <span class="pill">user</span></p>
+        <p class="desc">Glimmering silver sequin crop top and tight black athletic joggers.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-a0a2-7e63-a090-d3aa4598d8a5" alt="Elle Gorithm wardrobe" />
+              <figcaption>Elle Gorithm wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Elle Gorithm <span class="pill">user</span></p>
+        <p class="desc">Futuristic neon-blue lined vinyl trench coat and cybernetic visor.</p>
+        
+      </div>
+    </article>
+    </div>
+        <ul class="props">
+    <li class="prop">
+      <img class="thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea7-3ed0-76e2-9d3d-ad2a0f3cce07" alt="the heart diamond" />
+      <div>
+        <strong>the heart diamond</strong>
+        <p>A massive, multi-faceted heart-shaped diamond. It emits a soft, pulsing internal blue-white light that reflects off its sharp, flawless geometric cuts. The gemstone is pristine, with no scratches or inclusions, and sits on a small black velvet cushion. Its geometric facets refract light in brilliant crystalline patterns.</p>
+        
+      </div>
+    </li>
+    </ul>
+      </details>
+      <div class="shots">
+    <article class="shot">
+      <header>
+        <h4>Shot 1</h4>
+        <p class="time">0s – 5s</p>
+      </header>
+      <div class="shot-row">
+        <section class="subjects-panel">
+          <h5>Subjects</h5>
+          <div class="subjects shot-subjects">
+    <article class="subject shot-subject">
+      <p class="name">Tomatina</p>
+      <p class="meta-line">@tomatina-baddie</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/6a1a07a01d9204230afde1f6/01a06ea6-7724-7747-9e34-b1beba2090f5.jpg" alt="Tomatina" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Blake</p>
+      <p class="meta-line">@demontwink</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Elle Gorithm</p>
+      <p class="meta-line">@elle-gorithm</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+      
+    </article>
+    </div>
+        </section>
+        <section class="action-panel">
+          <h5>Action</h5>
+          <p class="prompt">Hard Cut to Tomatina at the heavy steel circular vault door with Blake and Elle Gorithm behind her. <span class="mention mention-user">[user:tomatina-baddie]</span> pulls the heavy steel dial on the vault door, making it spin and pop open. The camera pans slightly left, tracking her movement as a thin hiss of compressed air escapes the vault seal, while <span class="mention mention-user">[user:demontwink]</span> watches with high-energy excitement.</p>
+        </section>
+        <section class="dialogue-panel">
+          <h5>Dialogue</h5>
+          <div class="dialogue-line"><p class="speaker">demontwink | Blake</p><div class="line-wrap"><q class="line">Omg gurl the vault is totally giving unlocked tea!</q></div></div>
+          <div class="sfx"><strong>SFX</strong> Heavy metal spinning click, mechanical latch pop, sharp pneumatic air hiss</div>
+        </section>
+      </div>
+    </article>
+    
+    <article class="shot">
+      <header>
+        <h4>Shot 2</h4>
+        <p class="time">5s – 10s</p>
+      </header>
+      <div class="shot-row">
+        <section class="subjects-panel">
+          <h5>Subjects</h5>
+          <div class="subjects shot-subjects">
+    <article class="subject shot-subject">
+      <p class="name">Elle Gorithm</p>
+      <p class="meta-line">@elle-gorithm</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+      
+    </article>
+    </div>
+        </section>
+        <section class="action-panel">
+          <h5>Action</h5>
+          <p class="prompt">Hard Cut to a Front Close Up of Elle Gorithm as her metallic hands hover over the pulsing blue diamond on its pedestal. <span class="mention mention-user">[user:elle-gorithm]</span> lifts the heart diamond from its black velvet cushion inside the open glass display case. The camera dollies in closely, capturing the pulsing blue-white light of the heart diamond reflecting off her metallic cybernetic skin as she speaks in her rhythmic cadence.</p>
+        </section>
+        <section class="dialogue-panel">
+          <h5>Dialogue</h5>
+          <div class="dialogue-line"><p class="speaker">elle-gorithm | Elle Gorithm</p><div class="line-wrap"><q class="line">Data upload successful. Diamond extraction is serving total completion.</q></div></div>
+          <div class="sfx"><strong>SFX</strong> Faint digital hum, high-frequency energy pulse, glass lid creak</div>
+        </section>
+      </div>
+    </article>
+    </div>
+    </article>
+    
+    <article class="clip">
+      <header class="clip-head">
+        <h2>Clip 3</h2>
+        <p class="meta-line">
+          Museum Secret Vault
+          · 10s
+          · cinematic-modern
+          · <code>3CN0IPlX2FTSUqBiYrEbjW</code>
+        </p>
+        <div class="clip-media">
+          <figure>
+            <img class="scene" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-b4f0-7a75-b418-5516da47cbed.jpg" alt="background" />
+            <figcaption>Background </figcaption>
+          </figure>
+          <figure>
+            <img class="scene" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-775f-7532-8371-c7d01f370b49" alt="Museum Secret Vault" />
+            <figcaption>Museum Secret Vault </figcaption>
+          </figure>
+        </div>
+      </header>
+      <details><summary>Background description</summary><p class="desc">@Image1 provides the Environment Geometry to use as a reference. @Image2 depicts &quot;Security Guard&quot;.
+
+# Scene Overview
+In the museum setting, a single security guard stands positioned in the midground at the eastern doorway. The cool metallic vault walls from the background of @Image1 are visible behind him.
+
+# Frame Composition
+Front Medium Shot. The shot captures the security guard from the waist up. He is positioned center-frame in the midground, with his body framing the eastern doorway. The background shows the cool metallic vault walls from @Image1. The camera is positioned at eye-level directly in front of the subject, capturing his angry expression and raised flashlight.
+
+# @Image2 Edit Instructions
+- Pose: Standing upright in the doorway, holding a black flashlight aloft in his right hand, pointing it forward.
+- Frame Position: Center-frame in the midground.
+- Body Orientation: Torso facing front-right, head turned directly toward the camera.
+- Gaze: Looking directly forward at the camera with an angry, twisted facial expression.
+- Props and Held Items: A black tactical flashlight held aloft in his right hand.
+- Physical Condition: Face twisted in anger, forehead creased, mouth open as if shouting.
+- Preserve the identity and wardrobe as seen in @Image2, including the short-haired stocky middle-aged build and the navy blue security uniform.
+
+# Environment Description
+## Included (In Frame)
+- The eastern emergency exit doorway from the midground of @Image1
+- The metallic vault walls from the background of @Image1
+
+## Excluded (Not In Frame)
+- The polished marble floor from the foreground of @Image1
+- The central pedestal and glass display case from the midground of @Image1
+- The circular vault door from the background of @Image1
+
+# Lighting
+Cool white fluorescent overhead lighting casts a harsh, clinical glow across the scene, creating bright reflections on the guard&#x27;s brass uniform badge and casting sharp, deep shadows on his face and uniform.
+
+# Capture Style
+Change the image style to an IMAX photorealistic film still. Shot on ARRI Alexa 65 with IMAX 70mm film quality. Subject rendered with extreme crystal clarity, every detail hyper-defined and sharp. Photorealistic, high-fidelity texture. Ultra-sharp focus on subject, high micro-detail rendering. Freckles/skin pores visible, accurate skin texture, realistic fabric simulation. Massive dynamic range capture, deep shadows and bright highlights. Cinematic color science. Clean precise commercial color grade.</p></details><details><summary>Location description</summary><p class="desc">CAMERA ZONE: southeast corner looking northwest. FRAME: Eye-Level Three-Quarter Angle Wide Shot; camera offset from the pedestal&#x27;s long axis; near short end and one long side both visible; long edges receding diagonally toward the far end. VISIBLE GEOMETRY: The central pedestal with its glass display case stands in the midground, with the heavy steel circular vault door visible on the background west wall. DEPTH ORDER: Foreground polished marble floor; Midground black display pedestal with glass case; Background steel vault door. VISIBLE ROUTES: Marble walkway from the vault door to the display pedestal and the far emergency exit route. LIGHTING AND TIME: Night. Cool white fluorescent overhead panels illuminate the space, with a soft blue laser alarm grid casting faint intersecting lines across the room. FIXED GEOMETRY: A heavy, reinforced steel circular vault door stands on the west wall. A sleek black stone pedestal with a glass case sits centered in the room. An emergency exit doorway stands on the east wall. TRAVERSABLE ROUTES: A marble-tiled walkway connects the vault door on the west, the central display pedestal, and the emergency doorway on the east. CAMERA ZONES: One primary camera zone is anchored diagonally at the southeast corner, looking northwest toward the pedestal and vault door. LIGHTING AND TIME: Night. Cool white fluorescent overhead panels illuminate the space, with a soft blue laser alarm grid casting faint intersecting lines across the room.</p></details>
+      <details class="cast">
+        <summary>Cast, Wardrobe, and Props</summary>
+        <div class="subjects cast-subjects">
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-762c-7772-a0ce-677fc9205804" alt="Security Guard" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-7e12-7c07-876f-05468d7f718c" alt="Security Guard wardrobe" />
+              <figcaption>Security Guard wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Security Guard <span class="pill">npc</span></p>
+        <p class="desc">Navy blue security uniform shirt, brass badge, and tactical utility belt.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/6a1a07a01d9204230afde1f6/01a06ea6-7724-7747-9e34-b1beba2090f5.jpg" alt="Tomatina" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-9531-74db-b933-683bda93f170" alt="Tomatina wardrobe" />
+              <figcaption>Tomatina wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Tomatina <span class="pill">user</span></p>
+        <p class="desc">Sleek, tight black leather cat suit with gold zippers.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-a0d2-7c10-b013-5e8bbe7d9ee5" alt="Blake wardrobe" />
+              <figcaption>Blake wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Blake <span class="pill">user</span></p>
+        <p class="desc">Glimmering silver sequin crop top and tight black athletic joggers.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-a0a2-7e63-a090-d3aa4598d8a5" alt="Elle Gorithm wardrobe" />
+              <figcaption>Elle Gorithm wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Elle Gorithm <span class="pill">user</span></p>
+        <p class="desc">Futuristic neon-blue lined vinyl trench coat and cybernetic visor.</p>
+        
+      </div>
+    </article>
+    </div>
+        <ul class="props">
+    <li class="prop">
+      <img class="thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea7-3ed0-76e2-9d3d-ad2a0f3cce07" alt="the heart diamond" />
+      <div>
+        <strong>the heart diamond</strong>
+        <p>A massive, multi-faceted heart-shaped diamond. It emits a soft, pulsing internal blue-white light that reflects off its sharp, flawless geometric cuts. The gemstone is pristine, with no scratches or inclusions, and sits on a small black velvet cushion. Its geometric facets refract light in brilliant crystalline patterns.</p>
+        
+      </div>
+    </li>
+    </ul>
+      </details>
+      <div class="shots">
+    <article class="shot">
+      <header>
+        <h4>Shot 1</h4>
+        <p class="time">0s – 5s</p>
+      </header>
+      <div class="shot-row">
+        <section class="subjects-panel">
+          <h5>Subjects</h5>
+          <div class="subjects shot-subjects">
+    <article class="subject shot-subject">
+      <p class="name">Security Guard</p>
+      
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-762c-7772-a0ce-677fc9205804" alt="Security Guard" />
+      
+    </article>
+    </div>
+        </section>
+        <section class="action-panel">
+          <h5>Action</h5>
+          <p class="prompt">Hard Cut to the security guard stepping through the doorway with his flashlight raised. <span class="mention mention-character">[character:Security Guard]</span> enters the vault room from the far eastern doorway, aiming his bright tactical flashlight straight at the thieves. The camera quickly whip-pans right to capture the guard&#x27;s intense face as he screams his command, the bright white beam cutting through the room.</p>
+        </section>
+        <section class="dialogue-panel">
+          <h5>Dialogue</h5>
+          <div class="dialogue-line"><p class="speaker">Security Guard</p><div class="line-wrap"><q class="line">Freeze! Step away from the diamond right now!</q></div></div>
+          <div class="sfx"><strong>SFX</strong> Heavy heavy footsteps, metal door slamming against wall, high-pitched security alarm sirens</div>
+        </section>
+      </div>
+    </article>
+    
+    <article class="shot">
+      <header>
+        <h4>Shot 2</h4>
+        <p class="time">5s – 10s</p>
+      </header>
+      <div class="shot-row">
+        <section class="subjects-panel">
+          <h5>Subjects</h5>
+          <div class="subjects shot-subjects">
+    <article class="subject shot-subject">
+      <p class="name">Tomatina</p>
+      <p class="meta-line">@tomatina-baddie</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/6a1a07a01d9204230afde1f6/01a06ea6-7724-7747-9e34-b1beba2090f5.jpg" alt="Tomatina" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Blake</p>
+      <p class="meta-line">@demontwink</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Elle Gorithm</p>
+      <p class="meta-line">@elle-gorithm</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Security Guard</p>
+      
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-762c-7772-a0ce-677fc9205804" alt="Security Guard" />
+      
+    </article>
+    </div>
+        </section>
+        <section class="action-panel">
+          <h5>Action</h5>
+          <p class="prompt">Hard Cut to a Front Medium Shot of Tomatina aiming her throwing arm toward the doorway with a tomato in hand. <span class="mention mention-user">[user:tomatina-baddie]</span> pulls throwing tomato from her tactical pouch and hurls it forcefully toward <span class="mention mention-character">[character:Security Guard]</span> off-frame screen-right. The camera tracks throwing tomato flying through the air, bursting into a messy red spray directly on the guard&#x27;s face.</p>
+        </section>
+        <section class="dialogue-panel">
+          <h5>Dialogue</h5>
+          <div class="dialogue-line"><p class="speaker">tomatina-baddie | Tomatina</p><div class="line-wrap"><q class="line">Officer, catch this San Marzano and get sauced!</q></div></div>
+          <div class="sfx"><strong>SFX</strong> Whoosh of a fast throw, wet squish impact, guard groaning in confusion</div>
+        </section>
+      </div>
+    </article>
+    </div>
+    </article>
+    
+    <article class="clip">
+      <header class="clip-head">
+        <h2>Clip 4</h2>
+        <p class="meta-line">
+          Museum Secret Vault
+          · 5s
+          · cinematic-modern
+          · <code>3KgW25wMcjFK2rzK1gp74f</code>
+        </p>
+        <div class="clip-media">
+          <figure>
+            <img class="scene" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-bb73-7473-8ec1-782ffbd5abd8.jpg" alt="background" />
+            <figcaption>Background </figcaption>
+          </figure>
+          <figure>
+            <img class="scene" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-775f-7532-8371-c7d01f370b49" alt="Museum Secret Vault" />
+            <figcaption>Museum Secret Vault </figcaption>
+          </figure>
+        </div>
+      </header>
+      <details><summary>Background description</summary><p class="desc">@Image1 provides the Environment Geometry to use as a reference. @Image2 depicts &quot;Blake&quot;. @Image3 depicts &quot;Elle Gorithm&quot;. @Image4 depicts &quot;Security Guard&quot;.
+
+# Scene Overview
+A museum vault interior where Blake and Elle Gorithm stand in the midground of the marble floor, while the Security Guard stands directly behind them in the background near the steel vault door.
+
+# Frame Composition
+Two Shot at eye-level showing the three characters from the waist up. Blake is positioned frame-right in the midground, with Elle Gorithm standing to his left on the frame-left side of the midground. The Security Guard is positioned directly behind them in the center background, partially obscured by them. The marble floor of @Image1 is visible in the foreground and midground, with the vault door visible in the background. 
+
+# @Image2 Edit Instructions
+- Pose: Standing upright, his hands held together in front of his waist, bound by a pair of heavy-duty steel handcuffs.
+- Frame Position: Frame-right, midground on the polished marble floor.
+- Body Orientation: Torso angled slightly toward frame-left, head turned front facing the camera.
+- Gaze: Looking directly forward at the camera.
+- Props and Held Items: Thick steel handcuffs locked around both wrists.
+- Preserve the identity and wardrobe as seen in @Image2.
+
+# @Image3 Edit Instructions
+- Pose: Standing next to Blake, her hands bound together at her waist by a pair of heavy-duty steel handcuffs.
+- Frame Position: Frame-left, midground on the polished marble floor.
+- Body Orientation: Torso facing slightly frame-right, head facing the camera.
+- Gaze: Looking forward towards the camera.
+- Props and Held Items: Thick steel handcuffs locked around both wrists. A large, multi-faceted heart-shaped diamond glowing with internal blue light lies discarded on the marble floor near her boots.
+- Preserve the identity and wardrobe as seen in @Image3.
+
+# @Image4 Edit Instructions
+- Pose: Standing stiffly and upright directly behind Blake and Elle Gorithm.
+- Frame Position: Center-frame in the background, positioned between and behind the other two characters.
+- Body Orientation: Facing directly forward towards the camera.
+- Gaze: Looking forward with a startled, shocked expression.
+- Physical Condition: His face and the front of his uniform shirt are heavily splattered and dripping with messy red tomato pulp.
+- Preserve the identity and wardrobe as seen in @Image4.
+
+# Environment Description
+## Included (In Frame)
+- The polished marble floor from the foreground and midground of @Image1.
+- The heavy steel circular vault door on the background wall from @Image1.
+
+## Excluded (Not In Frame)
+- The central black display pedestal and glass display case from @Image1.
+
+# Lighting
+Cool white fluorescent overhead lighting casting soft shadows downward, with the blue laser alarm grid lines casting faint intersecting blue lines across the scene and characters.
+
+# Capture Style
+An IMAX photorealistic film still. Shot on ARRI Alexa 65 with IMAX 70mm film quality. Subject rendered with extreme crystal clarity, every detail hyper-defined and sharp. Photorealistic, high-fidelity texture. Ultra-sharp focus on subject, high micro-detail rendering. Freckles/skin pores visible, accurate skin texture, realistic fabric simulation. Massive dynamic range capture, deep shadows and bright highlights. Cinematic color science. Clean precise commercial color grade.</p></details><details><summary>Location description</summary><p class="desc">CAMERA ZONE: southeast corner looking northwest. FRAME: Eye-Level Three-Quarter Angle Wide Shot; camera offset from the pedestal&#x27;s long axis; near short end and one long side both visible; long edges receding diagonally toward the far end. VISIBLE GEOMETRY: The central pedestal with its glass display case stands in the midground, with the heavy steel circular vault door visible on the background west wall. DEPTH ORDER: Foreground polished marble floor; Midground black display pedestal with glass case; Background steel vault door. VISIBLE ROUTES: Marble walkway from the vault door to the display pedestal and the far emergency exit route. LIGHTING AND TIME: Night. Cool white fluorescent overhead panels illuminate the space, with a soft blue laser alarm grid casting faint intersecting lines across the room. FIXED GEOMETRY: A heavy, reinforced steel circular vault door stands on the west wall. A sleek black stone pedestal with a glass case sits centered in the room. An emergency exit doorway stands on the east wall. TRAVERSABLE ROUTES: A marble-tiled walkway connects the vault door on the west, the central display pedestal, and the emergency doorway on the east. CAMERA ZONES: One primary camera zone is anchored diagonally at the southeast corner, looking northwest toward the pedestal and vault door. LIGHTING AND TIME: Night. Cool white fluorescent overhead panels illuminate the space, with a soft blue laser alarm grid casting faint intersecting lines across the room.</p></details>
+      <details class="cast">
+        <summary>Cast, Wardrobe, and Props</summary>
+        <div class="subjects cast-subjects">
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-a0d2-7c10-b013-5e8bbe7d9ee5" alt="Blake wardrobe" />
+              <figcaption>Blake wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Blake <span class="pill">user</span></p>
+        <p class="desc">Glimmering silver sequin crop top and tight black athletic joggers.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-a0a2-7e63-a090-d3aa4598d8a5" alt="Elle Gorithm wardrobe" />
+              <figcaption>Elle Gorithm wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Elle Gorithm <span class="pill">user</span></p>
+        <p class="desc">Futuristic neon-blue lined vinyl trench coat and cybernetic visor.</p>
+        
+      </div>
+    </article>
+    
+    <article class="subject cast-subject">
+      <div class="subject-photos">
+        <figure class="subject-photo">
+          <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-762c-7772-a0ce-677fc9205804" alt="Security Guard" />
+          <figcaption>In wardrobe</figcaption>
+        </figure>
+        
+            <figure class="subject-photo">
+              <img class="wardrobe-thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-7e12-7c07-876f-05468d7f718c" alt="Security Guard wardrobe" />
+              <figcaption>Security Guard wardrobe</figcaption>
+              
+            </figure>
+            
+      </div>
+      <div>
+        <p class="name">Security Guard <span class="pill">npc</span></p>
+        <p class="desc">Navy blue security uniform shirt, brass badge, and tactical utility belt.</p>
+        
+      </div>
+    </article>
+    </div>
+        <ul class="props">
+    <li class="prop">
+      <img class="thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea7-3bb0-7c24-a2b1-d493c3cd4601" alt="steel handcuffs" />
+      <div>
+        <strong>steel handcuffs</strong>
+        <p>A pair of heavy-duty, double-locking steel handcuffs with a brushed metallic finish. The chain links connecting the two cuffs are thick and slightly worn with minor scuffs and scratches. Reflective highlights glint off the metallic circular teeth. The metal surfaces show realistic grime from frequent use.</p>
+        
+      </div>
+    </li>
+    
+    <li class="prop">
+      <img class="thumb" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea7-3ed0-76e2-9d3d-ad2a0f3cce07" alt="the heart diamond" />
+      <div>
+        <strong>the heart diamond</strong>
+        <p>A massive, multi-faceted heart-shaped diamond. It emits a soft, pulsing internal blue-white light that reflects off its sharp, flawless geometric cuts. The gemstone is pristine, with no scratches or inclusions, and sits on a small black velvet cushion. Its geometric facets refract light in brilliant crystalline patterns.</p>
+        
+      </div>
+    </li>
+    </ul>
+      </details>
+      <div class="shots">
+    <article class="shot">
+      <header>
+        <h4>Shot 1</h4>
+        <p class="time">0s – 5s</p>
+      </header>
+      <div class="shot-row">
+        <section class="subjects-panel">
+          <h5>Subjects</h5>
+          <div class="subjects shot-subjects">
+    <article class="subject shot-subject">
+      <p class="name">Blake</p>
+      <p class="meta-line">@demontwink</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/67cb9f6f93ef9554cbefe766/01a06ea6-76ec-7ea4-9acc-1376a713071b.jpg" alt="Blake" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Elle Gorithm</p>
+      <p class="meta-line">@elle-gorithm</p>
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/697909f0ca653f952bc50df8/01a06ea6-76e8-7ecc-b466-2c598a20c32a.jpg" alt="Elle Gorithm" />
+      
+    </article>
+    
+    <article class="subject shot-subject">
+      <p class="name">Security Guard</p>
+      
+      <img class="avatar" src="https://s3.amazonaws.com/signal-prod-01/bots/677f1883f8e1a6e3703a7394/01a06ea6-762c-7772-a0ce-677fc9205804" alt="Security Guard" />
+      
+    </article>
+    </div>
+        </section>
+        <section class="action-panel">
+          <h5>Action</h5>
+          <p class="prompt">Hard Cut to Blake and Elle Gorithm standing bound in steel handcuffs. <span class="mention mention-character">[character:Security Guard]</span> snaps steel handcuffs onto the wrists of <span class="mention mention-user">[user:demontwink]</span> and <span class="mention mention-user">[user:elle-gorithm]</span>, while Tomatina is now missing from the room. The camera dollies back slowly to show Blake whining in dramatic despair while Elle&#x27;s visor blinks &#x27;ERROR&#x27;.</p>
+        </section>
+        <section class="dialogue-panel">
+          <h5>Dialogue</h5>
+          <div class="dialogue-line"><p class="speaker">demontwink | Blake</p><div class="line-wrap"><q class="line">Prison is giving major flop era, mama!</q></div></div>
+          <div class="sfx"><strong>SFX</strong> Loud metallic handcuffs clicking shut, guard huffing, blaring emergency klaxon sirens fading</div>
+        </section>
+      </div>
+    </article>
+    </div>
+    </article>
+    
+</body>
+</html>
