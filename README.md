@@ -4,6 +4,7 @@ Static seed-view HTML exported from the local agentic-video-testing app.
 
 - Site: https://zrondos-ai.github.io/avt-pages/
 - Annotation snapshot (tonystark96: Tomatina & Blake): https://zrondos-ai.github.io/avt-pages/projects/4LXqJsO3a01bN1dGegTD4J/
+- Generate snapshot (Alice / Snoop Frogg, run 478): https://zrondos-ai.github.io/avt-pages/generate/24gadlFQ8CPMbr5wiWpBcP/478/
 - Generate UI snapshot (design feedback): https://zrondos-ai.github.io/avt-pages/generate/5iek4jluvBC8krJrkM0aF1/450/
 - P0 image grid (181402Z + 183838Z + 200558Z): https://zrondos-ai.github.io/avt-pages/evals/p0-grids/20260928-suite537-536/
 - Grok upsampler eval (Grok Upsampler · transform P0 → P1 (suite 540)): https://zrondos-ai.github.io/avt-pages/evals/grok-upsampler/20260928T200558Z/
